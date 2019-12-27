@@ -10,6 +10,10 @@
  - [Usage](#usage)
  - [Todo](#todo)
  - [Pull Requests](#pull-requests)
+ 
+## Packing
+
+`dotnet pack intercom-dotnet/src/Intercom/Intercom.csproj -p:TargetFrameworks=netstandard2.0 -o intercom-dotnet/pack -p:PackageVersion=3.0.0`
 
 ## Add a dependency
 
