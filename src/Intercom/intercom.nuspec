@@ -11,7 +11,7 @@
         The official Intercom API client library for .NET
     </description>
     <summary>The official Intercom API client library for .NET</summary>
-    <projectUrl>https://github.com/intercom/intercom-dotnet</projectUrl>
+    <projectUrl>https://github.com/hognevevle/intercom-dotnet</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/intercom/intercom-dotnet/master/src/assets/Intercom.png</iconUrl>
   </metadata>
 </package>
