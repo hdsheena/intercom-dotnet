@@ -20,6 +20,7 @@ namespace Intercom.Data
             public const String CLOSE = "close";
             public const String OPEN = "open";
             public const String NOTE = "note";
+            public const String SNOOZE = "snoozed";
         }
 
         public static class ReplySenderType

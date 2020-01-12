@@ -25,6 +25,8 @@ namespace Intercom.Data
 
         public String assignee_id { set; get; }
 
+        public long? snoozed_until { get; set; }
+
         public AdminConversationReply(String conversationId,
                                       String adminId, 
                                       String messageType = Reply.ReplyMessageType.COMMENT,
