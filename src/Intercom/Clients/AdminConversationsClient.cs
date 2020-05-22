@@ -17,6 +17,7 @@ namespace Intercom.Clients
         private const String CONVERSATIONS_RESOURCE = "conversations";
         private const String MESSAGES_RESOURCE = "messages";
         private const String REPLY_RESOURCE = "reply";
+        private const String TAGS_RESOURCE = "tags";
 
         public AdminConversationsClient(RestClientFactory restClientFactory)
             : base(CONVERSATIONS_RESOURCE, restClientFactory)
@@ -57,6 +58,64 @@ namespace Intercom.Clients
 
             ClientResponse<AdminConversationMessage> result = null;
             result = Post<AdminConversationMessage>(adminMessage, resource: MESSAGES_RESOURCE);
+            return result.Result;
+        }
+        
+        public Tag AttachTag(string conversationId, string tagId, string adminId)
+        {
+            if (conversationId == null)
+            {
+                throw new ArgumentNullException(nameof(conversationId));
+            }
+            
+            if (tagId == null)
+            {
+                throw new ArgumentNullException(nameof(tagId));
+            }
+            
+            if (adminId == null)
+            {
+                throw new ArgumentNullException(nameof(adminId));
+            }
+            
+            var body = Serialize<ConversationTagAttach>(new ConversationTagAttach
+            {
+                admin_id = adminId,
+                id = tagId
+            });
+
+            ClientResponse<Tag> result = null;
+            result = Post<Tag>(body, resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + conversationId + Path.DirectorySeparatorChar + TAGS_RESOURCE);
+            return result.Result;
+        }
+        
+        public Tag DetachTag(string conversationId, string tagId, string adminId)
+        {
+            if (conversationId == null)
+            {
+                throw new ArgumentNullException(nameof(conversationId));
+            }
+            
+            if (tagId == null)
+            {
+                throw new ArgumentNullException(nameof(tagId));
+            }
+            
+            if (adminId == null)
+            {
+                throw new ArgumentNullException(nameof(adminId));
+            }
+            
+            Dictionary<String, String> parameters = new Dictionary<string, string>();
+            parameters.Add(Constants.ADMIN_ID, adminId);
+            
+            ClientResponse<Tag> result = null;
+            result = Delete<Tag>(
+                parameters: parameters,
+                resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + conversationId +
+                                                 Path.DirectorySeparatorChar + TAGS_RESOURCE
+                                                 + Path.DirectorySeparatorChar + tagId);
+            
             return result.Result;
         }
 

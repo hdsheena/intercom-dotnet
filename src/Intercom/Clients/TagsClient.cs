@@ -111,7 +111,7 @@ namespace Intercom.Clients
         public Tags List()
         {
             ClientResponse<Tags> result = null;
-            result = Get<Tags>();
+            result = Get<Tags>(resource: TAGS_RESOURCE);
             return result.Result;
         }
 

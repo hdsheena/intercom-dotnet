@@ -10,6 +10,6 @@ namespace Intercom.Data
 	public class Tags
 	{
 		public string type { get; set; }
-		public List<Tag> tags { get; set; }
+		public List<Tag> data { get; set; }
 	}
 }
