@@ -13,7 +13,7 @@ namespace Intercom.Data
 	public class LocationData
 	{
 		public string type { get; set; }
-		public string city_name { get; set; }
+		public string city { get; set; }
 		public string continent_code { get; set; }
 		public string country_code { get; set; }
 		public string country_name { get; set; }

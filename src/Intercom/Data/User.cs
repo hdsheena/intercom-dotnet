@@ -24,16 +24,21 @@ namespace Intercom.Data
 		public object pseudonym { get; set; }
 		public bool? anonymous { get; set; }
         public Dictionary<String, Object> custom_attributes { get; set; }
-		public Avatar avatar { get; set; }
-		public LocationData location_data { get; set; }
+		public string avatar { get; set; }
+		public LocationData location { get; set; }
+
 		[JsonConverter(typeof(ListJsonConverter))]
 		public List<SocialProfile> social_profiles { get; set; }
+
 		[JsonConverter(typeof(ListJsonConverter))]
 		public List<Company> companies { get; set; }
+
 		[JsonConverter(typeof(ListJsonConverter))]
 		public List<Segment> segments { get; set; }
+
 		[JsonConverter(typeof(ListJsonConverter))]
-		public List<Tag> tags { get; set; }
+        public List<Tag> tags { get; set; }
+
         public string app_id { get; set; }
         public long? remote_created_at { get; set; }
         public string referrer { get; set; }
@@ -45,6 +50,34 @@ namespace Intercom.Data
         public bool marked_email_as_spam { get; set; }
         public bool has_hard_bounced { get; set; }
         public string last_seen_user_agent { get; set; }
+
+		public string DisplayName
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+					return name;
+                }
+
+                if (!string.IsNullOrWhiteSpace(pseudonym?.ToString()))
+                {
+                    return pseudonym?.ToString();
+                }
+
+				if (!string.IsNullOrWhiteSpace(location?.city))
+                {
+                    return $"Visitor from {location.city}";
+                }
+
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    return email;
+                }
+
+				return "Anonymous visitor";
+			}
+        }
 
 		public User()
 		{

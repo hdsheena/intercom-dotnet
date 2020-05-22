@@ -21,12 +21,19 @@ namespace Intercom.Data
         public bool read { get; set; }
         public string state { get; set; }
         public int total_count { get; set; }
-        public ConversationMessage conversation_message { get; set; }
+        //public ConversationMessage conversation_message { get; set; }
+
+        public ConversationSource source { get; set; }
+
         [JsonConverter(typeof(ListJsonConverter))]
         public List<ConversationPart> conversation_parts { get; set; }
+
         [JsonConverter(typeof(ListJsonConverter))]
         public List<Tag> tags { get; set; }
         public ConversationRating conversation_rating { get; set; }
-        public List<Customer> customers { get; set; }
+        //public List<Customer> customers { get; set; }
+
+        [JsonConverter(typeof(ListJsonConverter))]
+        public List<Contact> contacts { get; set; }
     }
 }

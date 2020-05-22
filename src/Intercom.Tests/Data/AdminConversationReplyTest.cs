@@ -17,7 +17,7 @@ namespace Intercom.Test
             var convo = mock.Reply(new AdminConversationReply("147", "25", "comment", "We noticed you using our Product,  do you have any questions?"));
 
             Assert.IsNotNull(convo);
-            Assert.IsTrue(convo.conversation_message.body.Contains("We noticed you using our Product"));
+            Assert.IsTrue(convo.source.body.Contains("We noticed you using our Product"));
         }
 
         [Test]

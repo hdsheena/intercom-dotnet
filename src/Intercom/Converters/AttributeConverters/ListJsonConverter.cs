@@ -32,15 +32,17 @@ namespace Intercom.Converters.AttributeConverters
                 Object result = null;
 
                 if (objectType == typeof(List<Company>))
-                    result = GetList<Company>(jobject, "companies");
+                    result = GetList<Company>(jobject, "data");
                 else if (objectType == typeof(List<SocialProfile>))
-                    result = GetList<SocialProfile>(jobject, "social_profiles");
+                    result = GetList<SocialProfile>(jobject, "data");
                 else if (objectType == typeof(List<Tag>))
-                    result = GetList<Tag>(jobject, "tags");
+                    result = GetList<Tag>(jobject, "data");
                 else if (objectType == typeof(List<Segment>))
                     result = GetList<Segment>(jobject, "segments");
                 else if (objectType == typeof(List<ConversationPart>))
                     result = GetList<ConversationPart>(jobject, "conversation_parts");
+                else if (objectType == typeof(List<Contact>))
+                    result = GetList<Contact>(jobject, "contacts");
 
                 return result;
             }
@@ -68,16 +70,19 @@ namespace Intercom.Converters.AttributeConverters
             writer.WriteRawValue(s);
         }
 
-        public override bool CanRead
-        {
-            get { return true; }
-        }
+        public override bool CanRead => true;
 
         private List<T> GetList<T>(JObject jobject, String key)
 			where T: class
         {
             var value = jobject.GetValue(key);
-            var result = (JsonConvert.DeserializeObject(value.ToString(), typeof(T[])) as T[]).ToList();
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            var result = (JsonConvert.DeserializeObject(value.ToString(), typeof(T[])) as T[])?.ToList() ?? new List<T>();
             return result;
         }
     }
