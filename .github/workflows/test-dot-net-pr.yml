@@ -1,0 +1,35 @@
+name: Publish Nuget package
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  PROJECT_NAME: intercom-dotnet
+  
+on:  
+  push:
+    branches-ignore:
+      - 'master'
+  pull_request:
+    branches-ignore:
+      - 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+
+      - name: Restore
+        run: dotnet restore ./src/$PROJECT_NAME.sln
+
+      - name: Build
+        run: dotnet build ./src/$PROJECT_NAME.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./src/$PROJECT_NAME.sln --configuration Release --no-restore
