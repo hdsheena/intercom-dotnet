@@ -1,24 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ReleaseVersion>2.1.2</ReleaseVersion>
+    <TargetFrameworks>netcoreapp3.1;netstandard2.0</TargetFrameworks>
     <PackageId>Intercom.Dotnet.Client</PackageId>
-    <PackageIconUrl>https://raw.githubusercontent.com/intercom/intercom-dotnet/master/src/assets/Intercom.png</PackageIconUrl>
+    <PackageIcon>content\Intercom.png</PackageIcon>
     <Owners>Intercom</Owners>
     <PackageProjectUrl>https://github.com/intercom/intercom-dotnet</PackageProjectUrl>
     <Summary>The digitaldjpool fork of the Intercom API client library for .NET Core</Summary>
     <Title>Intercom Dotnet Client with dotnetcore support</Title>
     <Description>The fork of the official Intercom API client library for .NET Standard 2.0</Description>
     <PackOnBuild>true</PackOnBuild>
-    <Version>2.1.2-djp-02</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageLicenseExpression></PackageLicenseExpression>
     <Copyright>Intercom.io</Copyright>
+    <RepositoryUrl>https://github.com/digitaldjpool/intercom-dotnet</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Source linking and PDB">
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <DebugType Condition="'$(DebugType)' == ''">embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'" Label="Required for deterministic build">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Label="Source linking to step into Release code with source code"/>
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\assets\Intercom.png" Pack="true" PackagePath="content\Intercom.png"/>
+  </ItemGroup>
+  
 </Project>
