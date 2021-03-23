@@ -42,5 +42,34 @@ namespace Intercom.Exceptions
             this.ApiResponseBody = apiResponseBody;
         }
 
+       
+        /// <remarks>
+        /// Adding our api error information to this exception similar to how System.IO.FileNotFoundException is done.
+        /// This allows our api error to be logged without abusing the <see cref="Message"/> property
+        /// https://stackoverflow.com/a/155606/255194
+        /// https://github.com/dotnet/runtime/blob/6072e4d3a7a2a1493f514cdf4be75a3d56580e84/src/libraries/System.Private.CoreLib/src/System/IO/FileNotFoundException.cs
+        /// </remarks>
+        public override string ToString()
+        {
+            string s = GetType().ToString() + ": " + Message;
+
+            foreach (var error in ApiErrors?.errors)
+            {
+                s += Environment.NewLine + error.message;
+            }
+
+            if (InnerException != null)
+            {
+                s += Environment.NewLine + " >" + InnerException.ToString();
+            }
+
+            if (StackTrace != null)
+            {
+                s += Environment.NewLine + StackTrace;
+            }
+
+            return s;
+        }
+
     }
 }
