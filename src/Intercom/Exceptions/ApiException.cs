@@ -1,9 +1,7 @@
 ﻿using System;
-using Intercom.Core;
+using System.Linq;
+using System.Text;
 using Intercom.Data;
-using Intercom.Clients;
-using Intercom.Exceptions;
-using RestSharp;
 
 namespace Intercom.Exceptions
 {
@@ -15,17 +13,15 @@ namespace Intercom.Exceptions
         public Errors ApiErrors { set; get; }
 
         public ApiException ()
-            :base()
         {
         }
 
         public ApiException (String message, Exception innerException) 
-            :base(message, innerException)
+            : base(message, innerException)
         {
         }
 
         public ApiException (int statusCode, String statusDescription, Errors apiErrors, String apiResponseBody)
-            :base()
         {
             this.StatusCode = statusCode;
             this.StatusDescription = statusDescription;
@@ -34,7 +30,7 @@ namespace Intercom.Exceptions
         }
 
         public ApiException (String message, Exception innerException, int statusCode, String statusDescription, Errors apiErrors, String apiResponseBody)
-            :base(message, innerException)
+            : base(message, innerException)
         {
             this.StatusCode = statusCode;
             this.StatusDescription = statusDescription;
@@ -51,25 +47,29 @@ namespace Intercom.Exceptions
         /// </remarks>
         public override string ToString()
         {
-            string s = GetType().ToString() + ": " + Message;
+            var builder = new StringBuilder($"{GetType()}: {Message}");
 
-            foreach (var error in ApiErrors?.errors)
+            foreach (var error in ApiErrors?.errors ?? Enumerable.Empty<Error>())
             {
-                s += Environment.NewLine + error.message;
+                builder.AppendFormat("{0}{1}", Environment.NewLine, error.message);
+            }
+
+            if (string.IsNullOrEmpty(ApiResponseBody) == false)
+            {
+                builder.AppendFormat("{0}{1}", Environment.NewLine, ApiResponseBody);
             }
 
             if (InnerException != null)
             {
-                s += Environment.NewLine + " >" + InnerException.ToString();
+                builder.AppendFormat("{0} >{1}", Environment.NewLine, InnerException);
             }
 
             if (StackTrace != null)
             {
-                s += Environment.NewLine + StackTrace;
+                builder.AppendFormat("{0}{1}", Environment.NewLine, StackTrace);
             }
 
-            return s;
+            return builder.ToString();
         }
-
     }
 }
