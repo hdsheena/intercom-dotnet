@@ -1,0 +1,53 @@
+name: Publish Nuget package
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+  # Project name to pack and publish
+  PROJECT_NAME: Intercom
+  PROJECT_VERSION: 2.1.2-djp
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Get version suffix
+        id: version
+        run: echo "::set-output name=suffix::$(date +'%Y%m%d-%H%M%S')"
+
+      - name: Restore
+        run: dotnet restore ./src/$PROJECT_NAME.sln
+
+      - name: Build
+        run: dotnet build ./src/$PROJECT_NAME.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./src/$PROJECT_NAME.sln --configuration Release --no-restore
+
+      - name: Pack
+        run: dotnet pack ./src/$PROJECT_NAME.sln --configuration Release -p:PackageVersion=$PROJECT_VERSION-CI-${{ steps.version.outputs.suffix }} --output nupkg --no-restore
+
+      - name: Push to GitHub Packages
+        run: |
+          for f in ./nupkg/*.nupkg
+          do
+            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+          done
+        env:
+          GITHUB_FEED: https://nuget.pkg.github.com/digitaldjpool/
+          GITHUB_USER: SeanFeldman
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
